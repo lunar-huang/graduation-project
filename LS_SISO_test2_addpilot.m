@@ -1,41 +1,34 @@
 clear;close all;
-%% »ù´¡ĞÅÏ¢
-L=256;              % ĞÅºÅ³¤¶È
-Nps=4;              % µ¼Æµ¼ä¸ô
+%% åŸºç¡€ä¿¡æ¯
+L=256;              % ä¿¡å·é•¿åº¦
+Nps=4;              % å¯¼é¢‘é—´éš”
 % K=12;               % sparsity
 K=randi(L);
 scale=1e-9;         % nano
 t_rms=25*scale;     % RMS delay spread
-num_ch=10000;       % Number of channels  Éú³ÉÈğÀûĞÅµÀÊ±Ê¹ÓÃ
+num_ch=10000;       % Number of channels  ç”Ÿæˆç‘åˆ©ä¿¡é“æ—¶ä½¿ç”¨
 fs=1000;            % sample frequency
 Nfft=256;           % FFT size
 fcup=3;             % uplink carrier frequence
 fcdown=6;           % downlink carrier frequence
-T=0.1;              % ĞÅºÅÖÜÆÚ
-%% Éú³Éº¬ÓĞĞÅÏ¢µÄĞÅºÅmsgintºÍµ¼ÆµĞòÁĞPilot
+T=0.1;              % ä¿¡å·å‘¨æœŸ
+%% ç”Ÿæˆå«æœ‰ä¿¡æ¯çš„ä¿¡å·msgintå’Œå¯¼é¢‘åºåˆ—Pilot
 Np=L/Nps;
 % msgint=Tsignal(L-Np,K);
 msgint=(randn(1,L-Np)>0);
 Pilot=2*(randn(1,L/Nps)>0)-1;
-%% Éú³É·¢ÉäĞÅºÅX
-[X,pilot_loc,msgint_data]=AddPilot(Pilot,L,msgint,Nps,fs,fcup,T);
-%% »ñµÃĞÅµÀ
+%% ç”Ÿæˆå‘å°„ä¿¡å·X
+[X,signal_data,pilot_loc]=AddPilot(Pilot,L,msgint,Nps,fs,fcup,T);
+%% è·å¾—ä¿¡é“
 [H,PDP,avg_pow_h]=channelIEEE80211(t_rms,1/fs,num_ch,Nfft);
 Y=X.*H';
-%% ½âµ÷   QPSK
+%% è§£è°ƒ   QPSK
 
 
-%% LSËã·¨
+%% LSç®—æ³•
 H_est=LS_CE(Y,Pilot,pilot_loc,L,Nps,'spline');
-%% »æÍ¼
+%% ç»˜å›¾
 t=0:1/fs:(L-Np)*T-1/fs;
-
-subplot(311)
-plot(t,msgint_data);
-% hold on;
-% plot(t,X_recover);
-% legend('X','X_recover');
-title('msgint');
 
 t=1:L;
 subplot(312)
