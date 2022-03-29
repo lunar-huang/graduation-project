@@ -1,8 +1,8 @@
-function [X_data,s]=QPSK(fs,fc,X,T)
-%fs ²ÉÑùÆµÂÊ
-%fc ÔØ²¨ÆµÂÊ
-%T  ±ÈÌØÖÜÆÚ
-%L  ĞÅºÅ³¤¶È
+function [s]=QPSK(fs,fc,X,T)
+%fs é‡‡æ ·é¢‘ç‡
+%fc è½½æ³¢é¢‘ç‡
+%T  æ¯”ç‰¹å‘¨æœŸ
+%L  ä¿¡å·é•¿åº¦
 
 t=0:1/fs:1-1/fs;
 m=2*X-1;
@@ -13,24 +13,24 @@ Q=m(2:2:L);
 
 bit_data=[];
 for i=1:L
-    bit_data=[bit_data,X(i)*ones(1,T*fs)];%ÔÚÒ»¸ö±ÈÌØÖÜÆÚÀïÃæÓĞT*Fs¸ö1ºÍ²ÉÑùµãÒ»Ä£Ò»Ñù
+    bit_data=[bit_data,X(i)*ones(1,T*fs)];%åœ¨ä¸€ä¸ªæ¯”ç‰¹å‘¨æœŸé‡Œé¢æœ‰T*Fsä¸ª1å’Œé‡‡æ ·ç‚¹ä¸€æ¨¡ä¸€æ ·
 end
 X_data=bit_data;
 I_data=[];Q_data=[];
 for i=1:L/2
-    %IÂ·ºÍQÂ·ÊÇÔ­À´±ÈÌØÖÜÆÚµÄÁ½±¶,2Tb=Ts(ÂëÔªÖÜÆÚ)£¬Òò´Ë²ÉÑùµã¸öÊıÎªT*Fs*2
+    %Iè·¯å’ŒQè·¯æ˜¯åŸæ¥æ¯”ç‰¹å‘¨æœŸçš„ä¸¤å€,2Tb=Ts(ç å…ƒå‘¨æœŸ)ï¼Œå› æ­¤é‡‡æ ·ç‚¹ä¸ªæ•°ä¸ºT*Fs*2
     I_data=[I_data,I(i)*ones(1,T*fs*2)];
     Q_data=[Q_data,Q(i)*ones(1,T*fs*2)];
 end
 % t=0:1/fs:L*T-1/fs;
 
-% ÔØ²¨ĞÅºÅ
-bit_t=0:1/fs:2*T-1/fs;%ÔØ²¨ÖÜÆÚÎª2±¶±ÈÌØÖÜÆÚ,¶¨ÒåÊ±¼äÖá
-%¶¨ÒåIÂ·ºÍQÂ·µÄÔØ²¨
+% è½½æ³¢ä¿¡å·
+bit_t=0:1/fs:2*T-1/fs;%è½½æ³¢å‘¨æœŸä¸º2å€æ¯”ç‰¹å‘¨æœŸ,å®šä¹‰æ—¶é—´è½´
+%å®šä¹‰Iè·¯å’ŒQè·¯çš„è½½æ³¢
 I_carrier=[];Q_carrier=[];
 for i=1:L/2
-    I_carrier=[I_carrier,I(i)*cos(2*pi*fc*bit_t)];%IÂ·ÔØ²¨ĞÅºÅ
-    Q_carrier=[Q_carrier,Q(i)*cos(2*pi*fc*bit_t+pi/2)];%QÂ·ÔØ²¨ĞÅºÅ
+    I_carrier=[I_carrier,I(i)*cos(2*pi*fc*bit_t)];%Iè·¯è½½æ³¢ä¿¡å·
+    Q_carrier=[Q_carrier,Q(i)*cos(2*pi*fc*bit_t+pi/2)];%Qè·¯è½½æ³¢ä¿¡å·
 end
-% ´«ÊäĞÅºÅ
+% ä¼ è¾“ä¿¡å·
 s=I_carrier+Q_carrier;
